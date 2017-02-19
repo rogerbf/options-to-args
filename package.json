@@ -1,0 +1,28 @@
+{
+  "name": "options-to-args",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --config .jest",
+    "start": "node index.js",
+    "watch:start": "chokidar \"*.js\" \"./**/*.js\" -c \"npm run start\"",
+    "eslint": "eslint .",
+    "eslint:fix": "eslint --fix .",
+    "watch:test": "jest --config .jest --watch",
+    "coverage": "jest --config .jest --coverage",
+    "watch:coverage": "jest --config .jest --coverage --watch"
+  },
+  "keywords": [],
+  "author": "rogerbf <roger@bergfalk.nu> (http://bergfalk.nu/)",
+  "license": "MIT",
+  "devDependencies": {
+    "chokidar-cli": "^1.2.0",
+    "eslint": "^3.15.0",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-plugin-promise": "^3.4.2",
+    "eslint-plugin-standard": "^2.0.1",
+    "jest-cli": "^18.1.0"
+  },
+  "dependencies": {}
+}
