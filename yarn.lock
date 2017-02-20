@@ -2130,6 +2130,10 @@ progress@^1.1.8:
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/progress/-/progress-1.1.8.tgz#e260c78f6161cdd9b0e56cc3e0a85de17c7a57be"
 
+protostar:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/protostar/-/protostar-0.0.1.tgz#5088482add1c52b23745780821b5e167ab04fcde"
+
 prr@~0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/prr/-/prr-0.0.0.tgz#1a84b85908325501411853d0081ee3fa86e2926a"
