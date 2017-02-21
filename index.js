@@ -58,15 +58,13 @@ const defaultConfiguration = {
   alias: {}
 }
 
-module.exports = (options, config = {}) =>
-  options
-  ? factory(
-      parse,
-      {},
-      Object.assign({}, defaultConfiguration, config)
-    )(options)
-  : factory(
+module.exports = Object.assign(
+  (options, configuration = {}) => factory(
+    parse, {}, Object.assign({}, defaultConfiguration, configuration)
+  )(options),
+  factory(
     parse,
     { setSyntax, addAlias },
-    Object.assign({}, defaultConfiguration, config)
+    defaultConfiguration
   )
+)

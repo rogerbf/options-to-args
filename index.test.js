@@ -31,7 +31,7 @@ test(`{ z: undefined }`, () => {
 })
 
 test(`custom syntax`, () => {
-  const customParser = parse().setSyntax({ prefix: `--` })
+  const customParser = parse.setSyntax({ prefix: `--` })
   expect(customParser({ w: 12045 }))
   .toEqual([ `--w`, 12045 ])
 })
