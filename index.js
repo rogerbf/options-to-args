@@ -1,6 +1,6 @@
 const factory = require(`protostar`)
 
-const parse = (factory, { syntax, alias }, options = {}) =>
+const parse = (factory, { syntax, alias }, options) =>
   Object.keys(options)
   .reduce((configuration, key) => {
     const value = options[key]
