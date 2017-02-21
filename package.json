@@ -1,7 +1,7 @@
 {
   "name": "options-to-args",
   "version": "0.0.1",
-  "description": "",
+  "description": "an options object to an array",
   "main": "index.js",
   "scripts": {
     "test": "jest --config .jest",
@@ -13,7 +13,14 @@
     "coverage": "jest --config .jest --coverage",
     "watch:coverage": "jest --config .jest --coverage --watch"
   },
-  "keywords": [],
+  "keywords": [
+    "spawn",
+    "execFile",
+    "options",
+    "args",
+    "arguments",
+    "subargs"
+  ],
   "author": "rogerbf <roger@bergfalk.nu> (http://bergfalk.nu/)",
   "license": "MIT",
   "devDependencies": {
