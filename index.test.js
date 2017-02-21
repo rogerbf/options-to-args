@@ -31,12 +31,14 @@ test(`{ z: undefined }`, () => {
 })
 
 test(`custom syntax`, () => {
-  const customParser = parse.setSyntax({ prefix: `--` })
-  expect(customParser({ w: 12045 }))
+  expect(parse.setSyntax({ prefix: `--` })({ w: 12045 }))
   .toEqual([ `--w`, 12045 ])
 })
 
 test(`alias`, () => {
   expect(parse({ timeout: 3000 }, { alias: { timeout: `t` } }))
   .toEqual([ `-t`, 3000 ])
+
+  expect(parse.addAlias({ timeout: `t` })({ timeout: 2000 }))
+  .toEqual([ `-t`, 2000 ])
 })
