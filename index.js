@@ -4,8 +4,9 @@ const parse = (factory, { syntax, alias }, options = {}) =>
   Object.keys(options)
   .reduce((configuration, key) => {
     const value = options[key]
-    const option = syntax.prefix +
-    (Object.keys(alias).includes(key) ? alias[key] : key)
+    const option = syntax.prefix + (
+      Object.keys(alias).includes(key) ? alias[key] : key
+    )
 
     switch (Array.isArray(value) ? `array` : typeof (value)) {
       case `string`:
@@ -57,10 +58,7 @@ const defaultConfiguration = {
   alias: {}
 }
 
-module.exports = (
-  options,
-  config = {}
-) =>
+module.exports = (options, config = {}) =>
   options
   ? factory(
       parse,
