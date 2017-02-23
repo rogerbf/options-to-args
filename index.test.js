@@ -10,6 +10,11 @@ test(`{ check: true }`, () => {
   .toEqual([ `check` ])
 })
 
+test(`{ check: false }`, () => {
+  expect(parse({ check: false }))
+  .toEqual([])
+})
+
 test(`{ files: [ 'README', 'package' ] }`, () => {
   expect(parse({ files: [ `README`, `package` ] }))
   .toEqual([ `-files=README,package` ])
@@ -41,4 +46,11 @@ test(`alias`, () => {
 
   expect(parse.addAlias({ timeout: `t` })({ timeout: 2000 }))
   .toEqual([ `-t`, 2000 ])
+
+  expect(
+    parse
+    .addAlias({ weight: `w` })
+    .addAlias({ strength: `s` })({ weight: 10, strength: `medium` })
+  )
+  .toEqual([ `-w`, 10, `-s`, `medium` ])
 })

@@ -16,7 +16,7 @@ const parse = (factory, { syntax, alias }, options) =>
       case `array`:
         return [ ...configuration, `${option}=${value.join(`,`)}` ]
       case `boolean`:
-        return [ ...configuration, key ]
+        return value ? [ ...configuration, key ] : configuration
       case `undefined`:
         return [ ...configuration, `${option}` ]
       case `object`:
@@ -59,12 +59,8 @@ const defaultConfiguration = {
 }
 
 module.exports = Object.assign(
-  (options, configuration = {}) => factory(
+  (options = {}, configuration = {}) => factory(
     parse, {}, Object.assign({}, defaultConfiguration, configuration)
   )(options),
-  factory(
-    parse,
-    { setSyntax, addAlias },
-    defaultConfiguration
-  )
+  factory(parse, { setSyntax, addAlias }, defaultConfiguration)
 )
