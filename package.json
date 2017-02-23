@@ -33,5 +33,13 @@
   },
   "dependencies": {
     "protostar": "^0.0.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rogerbf/options-to-args.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rogerbf/options-to-args/issues"
+  },
+  "homepage": "https://github.com/rogerbf/options-to-args#readme"
 }
