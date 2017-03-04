@@ -53,4 +53,11 @@ test(`alias`, () => {
     .addAlias({ strength: `s` })({ weight: 10, strength: `medium` })
   )
   .toEqual([ `-w`, 10, `-s`, `medium` ])
+
+  expect(
+    parse
+    .addAlias({ weight: `w`, strength: `s` })({
+      weight: 5, strength: `low`
+    })
+  ).toEqual([ `-w`, 5, `-s`, `low` ])
 })
