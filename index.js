@@ -1,11 +1,21 @@
 const factory = require(`protostar`)
+const keys = Object.keys
+const assign = Object.assign
 
+const defaultConfiguration = {
+  syntax: {
+    prefix: `-`
+  },
+  alias: {}
+}
+
+// MAIN
 const parse = (factory, { syntax, alias }, options) =>
-  Object.keys(options)
+  keys(options)
   .reduce((configuration, key) => {
     const value = options[key]
     const option = syntax.prefix + (
-      Object.keys(alias).includes(key) ? alias[key] : key
+      keys(alias).includes(key) ? alias[key] : key
     )
 
     switch (Array.isArray(value) ? `array` : typeof (value)) {
@@ -35,32 +45,27 @@ const parse = (factory, { syntax, alias }, options) =>
     }
   }, [])
 
+// METHOD
 const setSyntax = (factory, config, syntax) => {
-  return factory(Object.assign(
+  return factory(assign(
     {},
     config,
     { syntax }
   ))
 }
 
+// METHOD
 const addAlias = (factory, config, mapping) => {
-  return factory(Object.assign(
+  return factory(assign(
     {},
     config,
-    { alias: Object.assign({}, config.alias, mapping) }
+    { alias: assign({}, config.alias, mapping) }
   ))
 }
 
-const defaultConfiguration = {
-  syntax: {
-    prefix: `-`
-  },
-  alias: {}
-}
-
-module.exports = Object.assign(
+module.exports = assign(
   (options = {}, configuration = {}) => factory(
-    parse, {}, Object.assign({}, defaultConfiguration, configuration)
+    parse, {}, assign({}, defaultConfiguration, configuration)
   )(options),
   factory(parse, { setSyntax, addAlias }, defaultConfiguration)
 )
