@@ -1,61 +1,79 @@
 const factory = require(`protostar`)
-const keys = Object.keys
-const assign = Object.assign
+const _typeof = require(`./get-type`)
+const { keys, assign } = Object
 
 const defaultConfiguration = {
-  syntax: {
-    prefix: `-`
+  prefix: `-`,
+  behaviours: {
+    string: (parse, prefix, option, value) => [ prefix + option, value ],
+    number: (parse, prefix, option, value) => [ prefix + option, value ],
+    array: (parse, prefix, option, value) => `${prefix + option}=${value.join(`,`)}`,
+    boolean: (parse, prefix, option, value) => value ? option : [],
+    null: (parse, prefix, option, value) => prefix + option,
+    undefined: (parse, prefix, option, value) => prefix + option,
+    object: (parse, prefix, option, value) => [
+      `${prefix + option}`,
+      `[ ${parse(value).join(` `)} ]`
+    ]
   },
   alias: {}
 }
 
-// MAIN
-const parse = (factory, { syntax, alias }, options) =>
-  keys(options)
-  .reduce((configuration, key) => {
-    const value = options[key]
-    const option = syntax.prefix + (
-      keys(alias).includes(key) ? alias[key] : key
-    )
+const parse = (factory, configuration, options) => {
+  const { prefix, alias, behaviours } = configuration
+  const _parse = parse.bind(null, factory, configuration)
 
-    switch (Array.isArray(value) ? `array` : typeof (value)) {
+  return keys(options)
+  .reduce((args, key) => {
+    const value = options[key]
+
+    // Convert aliases
+    const option = keys(alias).includes(key) ? alias[key] : key
+
+    switch (_typeof(value)) {
       case `string`:
-        return [ ...configuration, `${option}`, value ]
+        return args.concat(
+          behaviours.string(_parse, prefix, option, value)
+        )
       case `number`:
-        return [ ...configuration, `${option}`, value ]
+        return args.concat(
+          behaviours.number(_parse, prefix, option, value)
+        )
       case `array`:
-        return [ ...configuration, `${option}=${value.join(`,`)}` ]
+        return args.concat(
+          behaviours.array(_parse, prefix, option, value)
+        )
       case `boolean`:
-        return value ? [ ...configuration, key ] : configuration
+        return args.concat(
+          behaviours.boolean(_parse, prefix, option, value)
+        )
       case `undefined`:
-        return [ ...configuration, `${option}` ]
+        return args.concat(
+          behaviours.undefined(_parse, prefix, option, value)
+        )
       case `object`:
-        return (
-          value !== null
-          ? [
-            ...configuration,
-            `${option}`,
-            `[ ${parse(factory, { syntax, alias }, value).join(` `)} ]`
-          ]
-          : [
-            ...configuration,
-            `${option}`
-          ]
+        return args.concat(
+          behaviours.object(_parse, prefix, option, value)
+        )
+      case `null`:
+        return args.concat(
+            behaviours.null(_parse, prefix, option, value)
         )
     }
   }, [])
+}
 
 // METHOD
-const setSyntax = (factory, config, syntax) => {
+const prefix = (factory, config, prefix) => {
   return factory(assign(
     {},
     config,
-    { syntax }
+    { prefix }
   ))
 }
 
 // METHOD
-const addAlias = (factory, config, mapping) => {
+const alias = (factory, config, mapping) => {
   return factory(assign(
     {},
     config,
@@ -67,5 +85,5 @@ module.exports = assign(
   (options = {}, configuration = {}) => factory(
     parse, {}, assign({}, defaultConfiguration, configuration)
   )(options),
-  factory(parse, { setSyntax, addAlias }, defaultConfiguration)
+  factory(parse, { prefix, alias }, defaultConfiguration)
 )
