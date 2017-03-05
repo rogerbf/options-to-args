@@ -36,7 +36,7 @@ test(`{ z: undefined }`, () => {
 })
 
 test(`custom syntax`, () => {
-  expect(parse.setSyntax({ prefix: `--` })({ w: 12045 }))
+  expect(parse.prefix(`--`)({ w: 12045 }))
   .toEqual([ `--w`, 12045 ])
 })
 
@@ -44,19 +44,19 @@ test(`alias`, () => {
   expect(parse({ timeout: 3000 }, { alias: { timeout: `t` } }))
   .toEqual([ `-t`, 3000 ])
 
-  expect(parse.addAlias({ timeout: `t` })({ timeout: 2000 }))
+  expect(parse.alias({ timeout: `t` })({ timeout: 2000 }))
   .toEqual([ `-t`, 2000 ])
 
   expect(
     parse
-    .addAlias({ weight: `w` })
-    .addAlias({ strength: `s` })({ weight: 10, strength: `medium` })
+    .alias({ weight: `w` })
+    .alias({ strength: `s` })({ weight: 10, strength: `medium` })
   )
   .toEqual([ `-w`, 10, `-s`, `medium` ])
 
   expect(
     parse
-    .addAlias({ weight: `w`, strength: `s` })({
+    .alias({ weight: `w`, strength: `s` })({
       weight: 5, strength: `low`
     })
   ).toEqual([ `-w`, 5, `-s`, `low` ])
