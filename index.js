@@ -4,7 +4,7 @@ const { keys, assign } = Object
 
 const defaultConfiguration = {
   prefix: `-`,
-  behaviours: {
+  behaviour: {
     string: (parse, prefix, option, value) => [ prefix + option, value ],
     number: (parse, prefix, option, value) => [ prefix + option, value ],
     array: (parse, prefix, option, value) => `${prefix + option}=${value.join(`,`)}`,
@@ -20,7 +20,7 @@ const defaultConfiguration = {
 }
 
 const parse = (factory, configuration, options) => {
-  const { prefix, alias, behaviours } = configuration
+  const { prefix, alias, behaviour } = configuration
 
   return keys(options)
   .reduce((args, key) => {
@@ -28,7 +28,7 @@ const parse = (factory, configuration, options) => {
     // Convert aliases
     const option = keys(alias).includes(key) ? alias[key] : key
 
-    return args.concat(behaviours[_typeof(value)](
+    return args.concat(behaviour[_typeof(value)](
       parse.bind(null, factory, configuration),
       prefix,
       option,
@@ -38,26 +38,47 @@ const parse = (factory, configuration, options) => {
 }
 
 // METHOD
-const prefix = (factory, config, prefix) => {
-  return factory(assign(
-    {},
-    config,
-    { prefix }
-  ))
+const prefix = (factory, configuration, prefix) => {
+  return factory(
+    assign(
+      {},
+      configuration,
+      { prefix }
+    )
+  )
 }
 
 // METHOD
-const alias = (factory, config, mapping) => {
-  return factory(assign(
-    {},
-    config,
-    { alias: assign({}, config.alias, mapping) }
-  ))
+const alias = (factory, configuration, mapping) => {
+  return factory(
+    assign(
+      {},
+      configuration,
+      { alias: assign({}, configuration.alias, mapping) }
+    )
+  )
+}
+
+// METHOD
+const behaviour = (factory, configuration, type, fn) => {
+  return factory(
+    assign(
+      {},
+      configuration,
+      {
+        behaviour: assign(
+          {},
+          configuration.behaviour,
+          { [type]: fn }
+        )
+      }
+    )
+  )
 }
 
 module.exports = assign(
   (options = {}, configuration = {}) => factory(
     parse, {}, assign({}, defaultConfiguration, configuration)
   )(options),
-  factory(parse, { prefix, alias }, defaultConfiguration)
+  factory(parse, { prefix, alias, behaviour }, defaultConfiguration)
 )

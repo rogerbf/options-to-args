@@ -61,3 +61,10 @@ test(`alias`, () => {
     })
   ).toEqual([ `-w`, 5, `-s`, `low` ])
 })
+
+test(`behaviour`, () => {
+  expect(parse.behaviour(`string`, (parse, prefix, option, value) => {
+    return `${prefix}custom${prefix}${option}${prefix}${value.toUpperCase()}`
+  })({ starship: `enterprise` }))
+  .toEqual([ `-custom-starship-ENTERPRISE` ])
+})
