@@ -12,7 +12,7 @@ const typeOfObject = subject =>
   )
 
 module.exports = thing =>
-  [ undefined ]
+  [ `undefined` ]
   .map(previous => typeof (thing) === `object` ? typeOfObject(thing) : previous)
   .map(previous => typeof (thing) === `string` ? `string` : previous)
   .map(previous => typeof (thing) === `number` ? `number` : previous)

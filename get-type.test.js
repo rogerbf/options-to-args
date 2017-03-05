@@ -29,5 +29,5 @@ it(`returns 'boolean'`, () => {
 })
 
 it(`returns 'undefined'`, () => {
-  expect(type(undefined)).toEqual(undefined)
+  expect(type(undefined)).toEqual(`undefined`)
 })
