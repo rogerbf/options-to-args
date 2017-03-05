@@ -5,13 +5,15 @@ const { keys, assign } = Object
 const defaultConfiguration = {
   prefix: `-`,
   behaviour: {
-    string: (parse, prefix, option, value) => [ prefix + option, value ],
-    number: (parse, prefix, option, value) => [ prefix + option, value ],
-    array: (parse, prefix, option, value) => `${prefix + option}=${value.join(`,`)}`,
-    boolean: (parse, prefix, option, value) => value ? option : [],
-    null: (parse, prefix, option, value) => prefix + option,
-    undefined: (parse, prefix, option, value) => prefix + option,
-    object: (parse, prefix, option, value) => [
+    string: ({ prefix, option, value }) => [ prefix + option, value ],
+    number: ({ prefix, option, value }) => [ prefix + option, value ],
+    boolean: ({ option, value }) => value ? option : [],
+    null: ({ prefix, option }) => prefix + option,
+    undefined: ({ prefix, option }) => prefix + option,
+    array: ({ prefix, option, value }) => (
+      `${prefix}${option}=${value.join(`,`)}`
+    ),
+    object: ({ parse, prefix, option, value }) => [
       `${prefix + option}`,
       `[ ${parse(value).join(` `)} ]`
     ]
@@ -19,27 +21,22 @@ const defaultConfiguration = {
   alias: {}
 }
 
-const parse = (factory, configuration, options) => {
-  const { prefix, alias, behaviour } = configuration
-
-  return (
-    keys(options)
-    .reduce((args, key) => {
-      const value = options[key]
-
-      return (
-        args.concat(
-          behaviour[_typeof(value)](
-            parse.bind(null, factory, configuration),
-            prefix,
-            keys(alias).includes(key) ? alias[key] : key, // Maybe alias
-            value
-          )
-        )
-      )
-    }, [])
-  )
-}
+const parse = (factory, { prefix, alias, behaviour }, options) => (
+  keys(options)
+  .map(key => ({
+    option: keys(alias).includes(key) ? alias[key] : key, // Maybe an alias
+    value: options[key]
+  }))
+  .map(({ option, value }) => (
+    behaviour[_typeof(value)]({
+      parse: parse.bind(null, factory, { prefix, alias, behaviour }),
+      prefix,
+      option,
+      value
+    })
+  ))
+  .reduce((args, arg) => args.concat(arg), [])
+)
 
 // METHOD
 const prefix = (factory, configuration, prefix) => {
