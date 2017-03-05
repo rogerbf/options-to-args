@@ -1,4 +1,4 @@
-const type = require(`./get-type`)
+const type = require(`./enhanced-typeof`)
 
 it(`is a function`, () => {
   expect(typeof (type)).toBe(`function`)
