@@ -22,19 +22,23 @@ const defaultConfiguration = {
 const parse = (factory, configuration, options) => {
   const { prefix, alias, behaviour } = configuration
 
-  return keys(options)
-  .reduce((args, key) => {
-    const value = options[key]
-    // Convert aliases
-    const option = keys(alias).includes(key) ? alias[key] : key
+  return (
+    keys(options)
+    .reduce((args, key) => {
+      const value = options[key]
 
-    return args.concat(behaviour[_typeof(value)](
-      parse.bind(null, factory, configuration),
-      prefix,
-      option,
-      value
-    ))
-  }, [])
+      return (
+        args.concat(
+          behaviour[_typeof(value)](
+            parse.bind(null, factory, configuration),
+            prefix,
+            keys(alias).includes(key) ? alias[key] : key, // Maybe alias
+            value
+          )
+        )
+      )
+    }, [])
+  )
 }
 
 // METHOD
