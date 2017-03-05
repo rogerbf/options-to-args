@@ -77,8 +77,19 @@ const behaviour = (factory, configuration, type, fn) => {
 }
 
 module.exports = assign(
-  (options = {}, configuration = {}) => factory(
-    parse, {}, assign({}, defaultConfiguration, configuration)
-  )(options),
-  factory(parse, { prefix, alias, behaviour }, defaultConfiguration)
+  (options = {}, configuration = {}) =>
+    factory(
+      parse,
+      {},
+      assign(
+        {},
+        defaultConfiguration,
+        configuration
+      )
+    )(options),
+  factory(
+    parse,
+    { prefix, alias, behaviour },
+    defaultConfiguration
+  )
 )
