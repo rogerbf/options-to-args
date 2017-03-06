@@ -1,5 +1,9 @@
 const parse = require(`./index`)
 
+test(`parse()`, () => {
+  expect(parse()).toEqual([])
+})
+
 test(`{ t: 3000 }`, () => {
   expect(parse({ t: 3000 }))
   .toEqual([ `-t`, 3000 ])
