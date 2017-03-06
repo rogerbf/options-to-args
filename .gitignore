@@ -1,7 +1,8 @@
 node_modules
+distribution
 .DS_Store
 package
 options-to-args*.tgz
 npm-debug.log
+.vscode
 coverage
-NOTES

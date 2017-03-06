@@ -2,7 +2,7 @@
   "name": "options-to-args",
   "version": "1.0.0",
   "description": "transform an options object into an array of args",
-  "main": "index.js",
+  "main": "distribution/index.js",
   "scripts": {
     "test": "jest --config .jest",
     "start": "node index.js",
