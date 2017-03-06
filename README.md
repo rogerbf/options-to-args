@@ -31,7 +31,7 @@ args({ options: undefined })          // [ '-options' ]
 
 ## api
 
-All methods will return a new instance of args with the updated configuration.
+All methods will return a new instance with the updated configuration.
 
 ### `args(options [, configuration])`
 
@@ -39,21 +39,15 @@ Parses an `options` object into an array and returns it.
 
 Expects `configuration` to be an object with any one of the following keys:
 
-- `prefix`
+`prefix` - a **string** with the option prefix, defaults to `'-'`.
 
-  A string with the command prefix, defaults to `'-'`.
+`alias` - a **Map** of substitutions for option names.
 
-- `alias`
-
-    A `Map` of substitutions for commands.
-
-- `behaviour`.
-
-    An object with type specific parsers.
+`behaviour` - an **object** of type-specific parsers.
 
 ### `.alias(from, to)`
 
-Add a mapping of one command to another. i.e.
+Add a mapping of one option name to another. i.e.
 
 ```javascript
 args.alias(`version`, `v`)({ version: true })
@@ -70,11 +64,11 @@ args.alias({ version: `v`, longterm: `lts` })
 
 ### `.prefix(prefix)`
 
-Change the default prefix.
+Change the default option prefix.
 
 ### `.behaviour(type, function)`
 
-Change the default behaviour when parsing options.
+Override the default behaviour.
 
 `type` is a string representation of a type i.e. `'string'`
 
@@ -82,9 +76,9 @@ Change the default behaviour when parsing options.
 
 ```javascript
 {
-  parse,  // main parser, useful for recursive parsing
+  parse,  // main parser (useful for recursive parsing)
   prefix, // command prefix
   key,    // option key
-  value   // option value belonging to key
+  value   // option value belonging to the key
 }
 ```
