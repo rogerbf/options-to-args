@@ -41,16 +41,16 @@ test(`custom syntax`, () => {
 })
 
 test(`alias`, () => {
-  expect(parse({ timeout: 3000 }, { alias: { timeout: `t` } }))
+  expect(parse({ timeout: 3000 }, { alias: new Map().set(`timeout`, `t`) }))
   .toEqual([ `-t`, 3000 ])
 
-  expect(parse.alias({ timeout: `t` })({ timeout: 2000 }))
+  expect(parse.alias(`timeout`, `t`)({ timeout: 2000 }))
   .toEqual([ `-t`, 2000 ])
 
   expect(
     parse
-    .alias({ weight: `w` })
-    .alias({ strength: `s` })({ weight: 10, strength: `medium` })
+    .alias(`weight`, `w`)
+    .alias(`strength`, `s`)({ weight: 10, strength: `medium` })
   )
   .toEqual([ `-w`, 10, `-s`, `medium` ])
 

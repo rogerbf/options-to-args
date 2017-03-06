@@ -18,13 +18,13 @@ const defaultConfiguration = {
       `[ ${parse(value).join(` `)} ]`
     ]
   },
-  alias: {}
+  alias: new Map()
 }
 
 const parse = (factory, { prefix, alias, behaviour }, options) => (
   keys(options)
   .map(key => ({
-    option: keys(alias).includes(key) ? alias[key] : key, // Maybe an alias
+    option: alias.get(key) || key,
     value: options[key]
   }))
   .map(({ option, value }) => (
@@ -50,12 +50,23 @@ const prefix = (factory, configuration, prefix) => {
 }
 
 // METHOD
-const alias = (factory, configuration, mapping) => {
+const alias = (factory, configuration, from, to) => {
   return factory(
     assign(
       {},
       configuration,
-      { alias: assign({}, configuration.alias, mapping) }
+      { alias: (
+          typeof (from) === `object`
+          ? (
+            keys(from)
+            .reduce(
+              (alias, key) => alias.set(key, from[key]),
+              new Map(configuration.alias.entries())
+            )
+          )
+          : new Map(configuration.alias.entries()).set(from, to)
+        )
+      }
     )
   )
 }
