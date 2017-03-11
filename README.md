@@ -78,7 +78,7 @@ Override the default behaviour.
 {
   parse,  // main parser (useful for recursive parsing)
   prefix, // command prefix
-  key,    // option key
-  value   // option value belonging to the key
+  option,    // option name
+  value   // option value
 }
 ```
