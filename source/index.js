@@ -35,11 +35,10 @@ module.exports = assign(
     factory(
       parse,
       {},
-      assign(
-        {},
-        defaultConfiguration,
-        configuration
-      )
+      {
+        ...defaultConfiguration,
+        ...configuration
+      }
     )(options),
   factory(
     parse,
@@ -48,7 +47,7 @@ module.exports = assign(
   ),
   {
     behaviours: {
-      legacy: legacyBehaviour,
+      legacy: { ...defaultBehaviour, ...legacyBehaviour },
       default: defaultBehaviour
     }
   }

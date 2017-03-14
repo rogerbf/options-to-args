@@ -1,9 +1,4 @@
-module.exports = (factory, configuration, prefix) => {
-  return factory(
-    Object.assign(
-      {},
-      configuration,
-      { prefix }
-    )
-  )
-}
+module.exports = (factory, configuration, prefix) => factory({
+  ...configuration,
+  prefix
+})

@@ -1,17 +1,7 @@
-const { assign } = Object
-
-module.exports = (factory, configuration, type, fn) => {
-  return factory(
-    assign(
-      {},
-      configuration,
-      {
-        behaviour: assign(
-          {},
-          configuration.behaviour,
-          { [type]: fn }
-        )
-      }
-    )
-  )
-}
+module.exports = (factory, configuration, type, fn) => factory({
+  ...configuration,
+  behaviour: {
+    ...configuration.behaviour,
+    [type]: fn
+  }
+})
