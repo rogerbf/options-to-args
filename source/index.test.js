@@ -5,7 +5,7 @@ test(`parse()`, () => {
 })
 
 test(`{ t: 3000 }`, () => {
-  expect(parse({ t: 3000 }))
+  expect(parse.prefix(`-`)({ t: 3000 }))
   .toEqual([ `-t`, 3000 ])
 })
 
@@ -19,23 +19,28 @@ test(`{ check: false }`, () => {
   .toEqual([])
 })
 
-test(`{ files: [ 'README', 'package' ] }`, () => {
-  expect(parse({ files: [ `README`, `package` ] }))
-  .toEqual([ `-files=README,package` ])
+test(`{ get: [ 'width', 'height' ] }`, () => {
+  expect(parse.prefix(`-`)({ get: [ `width`, `height` ] }))
+  .toEqual([ `-get`, `width`, `-get`, `height` ])
 })
 
 test(`{ t: { minifier: 'all' } }`, () => {
-  expect(parse({ t: { minifier: `all` } }))
-  .toEqual([ `-t`, `[ -minifier all ]` ])
+  expect(parse.prefix(`-`)({ t: { minifier: `all` } }))
+  .toEqual([ `-t`, `minifier`, `all` ])
+})
+
+test(`{ s: { k1: 'v1', k2: 'v2' } }`, () => {
+  expect(parse.prefix(`-`)({ s: { k1: `v1`, k2: `v2` } }))
+  .toEqual([ `-s`, `k1`, `v1`, `-s`, `k2`, `v2` ])
 })
 
 test(`{ z: null }`, () => {
-  expect(parse({ z: null }))
+  expect(parse.prefix(`-`)({ z: null }))
   .toEqual([ `-z` ])
 })
 
 test(`{ z: undefined }`, () => {
-  expect(parse({ z: undefined }))
+  expect(parse.prefix(`-`)({ z: undefined }))
   .toEqual([ `-z` ])
 })
 
@@ -45,14 +50,15 @@ test(`custom syntax`, () => {
 })
 
 test(`alias`, () => {
-  expect(parse({ timeout: 3000 }, { alias: new Map().set(`timeout`, `t`) }))
+  expect(parse({ timeout: 3000 }, { prefix: `-`, alias: new Map().set(`timeout`, `t`) }))
   .toEqual([ `-t`, 3000 ])
 
   expect(parse.alias(`timeout`, `t`)({ timeout: 2000 }))
-  .toEqual([ `-t`, 2000 ])
+  .toEqual([ `t`, 2000 ])
 
   expect(
     parse
+    .prefix(`-`)
     .alias(`weight`, `w`)
     .alias(`strength`, `s`)({ weight: 10, strength: `medium` })
   )
@@ -60,6 +66,7 @@ test(`alias`, () => {
 
   expect(
     parse
+    .prefix(`-`)
     .alias({ weight: `w`, strength: `s` })({
       weight: 5, strength: `low`
     })
@@ -67,8 +74,8 @@ test(`alias`, () => {
 })
 
 test(`behaviour`, () => {
-  expect(parse.behaviour(`string`, ({ parse, prefix, option, value }) => {
-    return `${prefix}custom${prefix}${option}${prefix}${value.toUpperCase()}`
+  expect(parse.prefix(`-`).behaviour(`string`, ({ parse, state: { prefix }, option, value }) => {
+    return `${prefix}custom${option}${prefix}${value.toUpperCase()}`
   })({ starship: `enterprise` }))
   .toEqual([ `-custom-starship-ENTERPRISE` ])
 })

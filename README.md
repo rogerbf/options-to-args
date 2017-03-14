@@ -7,26 +7,26 @@ Suitable for use with `spawn` and `execFile`.
 ## usage
 
 ```javascript
-const args = require(`options-to-args`)
+const args = require(`options-to-args`).prefix(`-`)
 
 args({
   model: `ncc-1701`,
   crew: [ `kirk`, `spock` ]
 })
-// [ '-model', 'ncc-1701', '-crew=kirk,spock' ]
+// [ '-model', 'ncc-1701', '-crew', 'kirk', '-crew', 'spock' ]
 ```
 
 ### default behaviour
 
 ```javascript
-args({ option: `value` })             // [ `-option`, `value` ]
-args({ option: 10 })                  // [ `-option`, 10 ]
-args({ option: [ `a`, `b` ] })        // [ `-option=a,b` ]
-args({ options: { inner: `value` } }) // [ '-options', '[ -inner value ]' ]
-args({ options: true })               // [ 'options' ]
-args({ options: false })              // []
-args({ options: null })               // [ '-options' ]
-args({ options: undefined })          // [ '-options' ]
+args({ option: `value` })        // [ 'option', 'value' ]
+args({ option: 10 })             // [ 'option', 10 ]
+args({ option: [ `a`, `b` ] })   // [ 'option', 'a', 'option', 'b' ]
+args({ option: { k: `v` } })     // [ 'option', 'k', 'v' ]
+args({ option: true })           // [ 'option' ]
+args({ option: false })          // []
+args({ option: null })           // [ 'option' ]
+args({ option: undefined })      // [ 'option' ]
 ```
 
 ## api
@@ -37,9 +37,9 @@ All methods will return a new instance with the updated configuration.
 
 Parses an `options` object into an array and returns it.
 
-Expects `configuration` to be an object with any one of the following keys:
+Expects `configuration` to be an object with one or more of the following keys:
 
-`prefix` - a **string** with the option prefix, defaults to `'-'`.
+`prefix` - a **string** with the option prefix, defaults to undefined.
 
 `alias` - a **Map** of substitutions for option names.
 
@@ -56,7 +56,7 @@ args.alias(`version`, `v`)({ version: true })
 
 ### `.alias(mappings)`
 
-`.alias` can also consume an object containing several mappings. i.e.
+`.alias` can also consume an object containing a number mappings. i.e.
 
 ```javascript
 args.alias({ version: `v`, longterm: `lts` })
@@ -64,7 +64,7 @@ args.alias({ version: `v`, longterm: `lts` })
 
 ### `.prefix(prefix)`
 
-Change the default option prefix.
+Change the default prefix.
 
 ### `.behaviour(type, function)`
 
@@ -77,8 +77,8 @@ Override the default behaviour.
 ```javascript
 {
   parse,  // main parser (useful for recursive parsing)
-  prefix, // command prefix
-  option,    // option name
+  state,  // { alias, behaviour, prefix }
+  option, // option name
   value   // option value
 }
 ```

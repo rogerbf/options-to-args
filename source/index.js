@@ -1,99 +1,39 @@
 const factory = require(`protostar`)
 const type = require(`type-detect`)
-const { keys, assign } = Object
-
-const defaultConfiguration = {
-  prefix: `-`,
-  behaviour: {
-    string: ({ prefix, option, value }) => [ prefix + option, value ],
-    number: ({ prefix, option, value }) => [ prefix + option, value ],
-    boolean: ({ option, value }) => value ? option : [],
-    null: ({ prefix, option }) => prefix + option,
-    undefined: ({ prefix, option }) => prefix + option,
-    Array: ({ prefix, option, value }) => (
-      `${prefix}${option}=${value.join(`,`)}`
-    ),
-    Object: ({ parse, prefix, option, value }) => [
-      `${prefix + option}`,
-      `[ ${parse(value).join(` `)} ]`
-    ]
-  },
-  alias: new Map()
-}
+const prefix = require(`./prefix`)
+const alias = require(`./alias`)
+const behaviour = require(`./behaviour`)
+const defaultBehaviour = require(`./default-behaviour`)
 
 const parse = (factory, { prefix, alias, behaviour }, options) => (
-  keys(options)
+  Object.keys(options)
   .map(key => ({
     option: alias.get(key) || key,
     value: options[key]
   }))
   .map(({ option, value }) => (
     behaviour[type(value)]({
-      parse: parse.bind(null, factory, { prefix, alias, behaviour }),
-      prefix,
-      option,
+      parse: parse.bind(null, factory),
+      state: { prefix, alias, behaviour },
+      option: prefix ? prefix + option : option,
       value
     })
   ))
   .reduce((args, arg) => args.concat(arg), [])
 )
 
-// METHOD
-const prefix = (factory, configuration, prefix) => {
-  return factory(
-    assign(
-      {},
-      configuration,
-      { prefix }
-    )
-  )
+const defaultConfiguration = {
+  prefix: undefined,
+  alias: new Map(),
+  behaviour: defaultBehaviour
 }
 
-// METHOD
-const alias = (factory, configuration, from, to) => {
-  return factory(
-    assign(
-      {},
-      configuration,
-      { alias: (
-          typeof (from) === `object`
-          ? (
-            keys(from)
-            .reduce(
-              (alias, key) => alias.set(key, from[key]),
-              new Map(configuration.alias.entries())
-            )
-          )
-          : new Map(configuration.alias.entries()).set(from, to)
-        )
-      }
-    )
-  )
-}
-
-// METHOD
-const behaviour = (factory, configuration, type, fn) => {
-  return factory(
-    assign(
-      {},
-      configuration,
-      {
-        behaviour: assign(
-          {},
-          configuration.behaviour,
-          { [type]: fn }
-        )
-      }
-    )
-  )
-}
-
-module.exports = assign(
+module.exports = Object.assign(
   (options = {}, configuration = {}) =>
     factory(
       parse,
       {},
-      assign(
+      Object.assign(
         {},
         defaultConfiguration,
         configuration
