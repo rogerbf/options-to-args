@@ -6,12 +6,18 @@ it(`is defined`, () => {
 })
 
 test(`{ files: [ 'README', 'package' ] }`, () => {
-  expect(args.behaviour(`Array`, legacy.Array)({ files: [ `README`, `package` ] }))
+  expect(
+    args.behaviour(`Array`, legacy.Array)({ files: [ `README`, `package` ] })
+  )
   .toEqual([ `files=README,package` ])
 })
 
 test(`{ files: [ 'README', 'package' ] }`, () => {
-  expect(args.prefix(`-`).behaviour(`Array`, legacy.Array)({ files: [ `README`, `package` ] }))
+  expect(
+    args
+    .prefix(`-`)
+    .behaviour(`Array`, legacy.Array)({ files: [ `README`, `package` ] })
+  )
   .toEqual([ `-files=README,package` ])
 })
 
@@ -21,6 +27,10 @@ test(`{ t: { minifier: 'all' } }`, () => {
 })
 
 test(`{ t: { minifier: 'all' } }`, () => {
-  expect(args.prefix(`-`).behaviour(`Object`, legacy.Object)({ t: { minifier: `all` } }))
+  expect(
+    args
+    .prefix(`-`)
+    .behaviour(`Object`, legacy.Object)({ t: { minifier: `all` } })
+  )
   .toEqual([ `-t`, `[ -minifier all ]` ])
 })
