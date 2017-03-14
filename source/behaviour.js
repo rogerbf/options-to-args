@@ -1,7 +1,11 @@
 module.exports = (factory, configuration, type, fn) => factory({
   ...configuration,
-  behaviour: {
-    ...configuration.behaviour,
-    [type]: fn
-  }
+  behaviour: (
+    typeof (type) === `string`
+    ? { ...configuration.behaviour, [type]: fn }
+    : Object.keys(type).reduce(
+      (all, key) => ({ ...all, [key]: type[key] }),
+      { ...configuration.behaviour }
+    )
+  )
 })
