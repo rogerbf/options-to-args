@@ -5,10 +5,9 @@ const alias = require(`./alias`)
 const behaviour = require(`./behaviour`)
 const defaultBehaviour = require(`./default-behaviour`)
 const legacyBehaviour = require(`./legacy-behaviour`)
-const { keys, assign } = Object
 
 const parse = (factory, { prefix, alias, behaviour }, options) => (
-  keys(options)
+  Object.keys(options)
   .map(key => ({
     option: alias.get(key) || key,
     value: options[key]
@@ -30,7 +29,7 @@ const defaultConfiguration = {
   behaviour: defaultBehaviour
 }
 
-module.exports = assign(
+module.exports = Object.assign(
   (options = {}, configuration = {}) =>
     factory(
       parse,
