@@ -1,5 +1,5 @@
 const factory = require(`protostar`)
-const _typeof = require(`./enhanced-typeof`)
+const type = require(`type-detect`)
 const { keys, assign } = Object
 
 const defaultConfiguration = {
@@ -10,10 +10,10 @@ const defaultConfiguration = {
     boolean: ({ option, value }) => value ? option : [],
     null: ({ prefix, option }) => prefix + option,
     undefined: ({ prefix, option }) => prefix + option,
-    array: ({ prefix, option, value }) => (
+    Array: ({ prefix, option, value }) => (
       `${prefix}${option}=${value.join(`,`)}`
     ),
-    object: ({ parse, prefix, option, value }) => [
+    Object: ({ parse, prefix, option, value }) => [
       `${prefix + option}`,
       `[ ${parse(value).join(` `)} ]`
     ]
@@ -28,7 +28,7 @@ const parse = (factory, { prefix, alias, behaviour }, options) => (
     value: options[key]
   }))
   .map(({ option, value }) => (
-    behaviour[_typeof(value)]({
+    behaviour[type(value)]({
       parse: parse.bind(null, factory, { prefix, alias, behaviour }),
       prefix,
       option,
