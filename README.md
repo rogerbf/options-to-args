@@ -70,9 +70,9 @@ Change the default option prefix.
 
 Override the default behaviour.
 
-`type` is a string representation of a type i.e. `'string'`
+`type` string representation of a type i.e. `'string'`. [type-detect](https://github.com/chaijs/type-detect) handles type detection.
 
-`function` is the handler for said type, it is called with an object containing:
+`function` type specific parser, called with an object containing:
 
 ```javascript
 {
