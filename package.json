@@ -1,6 +1,6 @@
 {
   "name": "options-to-args",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "transform an options object into an array of args",
   "main": "./distribution/index.js",
   "scripts": {
