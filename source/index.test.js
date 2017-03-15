@@ -50,9 +50,6 @@ test(`custom syntax`, () => {
 })
 
 test(`alias`, () => {
-  expect(parse({ timeout: 3000 }, { prefix: `-`, alias: new Map().set(`timeout`, `t`) }))
-  .toEqual([ `-t`, 3000 ])
-
   expect(parse.alias(`timeout`, `t`)({ timeout: 2000 }))
   .toEqual([ `t`, 2000 ])
 
