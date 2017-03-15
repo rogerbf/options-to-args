@@ -56,7 +56,7 @@ args.alias({ version: `v`, longterm: `lts` })
 
 ### `.prefix(prefix)`
 
-Change the default prefix.
+Add a command prefix.
 
 ### `.behaviour(type, function)`
 
