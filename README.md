@@ -33,17 +33,9 @@ args({ option: undefined })      // [ 'option' ]
 
 All methods will return a new instance with the updated configuration.
 
-### `args(options [, configuration])`
+### `args(options)`
 
 Parses an `options` object into an array and returns it.
-
-Expects `configuration` to be an object with one or more of the following keys:
-
-`prefix` - a **string** with the option prefix, defaults to undefined.
-
-`alias` - a **Map** of substitutions for option names.
-
-`behaviour` - an **object** of type-specific parsers.
 
 ### `.alias(from, to)`
 
