@@ -4,6 +4,17 @@ Transform an options object into an array of args.
 
 Suitable for use with `spawn` and `execFile`.
 
+**Differences from v1**
+
+- There is no default prefix
+
+- New default behaviour, to use the same behaviour as v1:
+
+  ```javascript
+  const args = require(`options-to-args`)
+  const legacy = args.behaviour(args.behaviours.legacy)
+  ```
+
 ## usage
 
 ```javascript
@@ -74,3 +85,11 @@ Override the default behaviour.
   value   // option value
 }
 ```
+
+### `.behaviours.default`
+
+The default behaviour
+
+### `.behaviours.legacy`
+
+Old v1 behaviour
