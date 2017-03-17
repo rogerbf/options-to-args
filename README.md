@@ -8,7 +8,7 @@ Suitable for use with `spawn` and `execFile`.
 
 - There is no default prefix
 
-- New default behaviour, to use the same behaviour as v1:
+- New default behaviour, to use the old behaviour:
 
   ```javascript
   const args = require(`options-to-args`)
@@ -50,7 +50,9 @@ Parses an `options` object into an array and returns it.
 
 ### `.alias(from, to)`
 
-Add a mapping of one option name to another. i.e.
+Add a mapping of one option name to another.
+
+#### example
 
 ```javascript
 args.alias(`version`, `v`)({ version: true })
@@ -59,7 +61,9 @@ args.alias(`version`, `v`)({ version: true })
 
 ### `.alias(mappings)`
 
-`.alias` can also consume an object containing a number mappings. i.e.
+`.alias` can also consume an object containing multiple mappings.
+
+#### example
 
 ```javascript
 args.alias({ version: `v`, longterm: `lts` })
@@ -86,10 +90,26 @@ Override the default behaviour.
 }
 ```
 
+### `.behaviour(behaviours)`
+
+Replace all behaviours. `behaviours` is an object with keys mapping to functions as described above.
+
+#### example
+
+```javascript
+const args = require(`options-to-args`).behaviour(
+  Object.assign(
+    {},
+    args.behaviours.default,
+    require(`./customArrayBehaviour`) // module.exports = { Array: fn }
+  )
+)
+```
+
 ### `.behaviours.default`
 
-The default behaviour
+Object containing all the default behaviours
 
 ### `.behaviours.legacy`
 
-Old v1 behaviour
+Object containing all the legacy behaviours (used in v1)
